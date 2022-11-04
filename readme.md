@@ -28,10 +28,13 @@ options.port = 3050;
 options.database = 'minha-base-de-dados';
 options.user = 'SYSDBA';
 options.password = 'masterkey';
-options.lowercase_keys = false; // set to true to lowercase keys
-options.role = null;            // default
-options.pageSize = 4096;        // default when creating database
-options.pageSize = 4096;        // default when creating database
-options.retryConnectionInterval = 1000; // reconnect interval in case of connection drop
+// set to true to lowercase keys
+options.lowercase_keys = false; 
+// default
+options.role = null;            
+// default when creating database
+options.pageSize = 4096;        
+// reconnect interval in case of connection drop
+options.retryConnectionInterval = 1000; 
 
 module.exports={Firebird,options}
