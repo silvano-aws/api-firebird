@@ -1,65 +1,87 @@
+//const req = require('express/lib/request');
 var express = require('express');
-const req = require('express/lib/request');
 var router = express.Router();
+var cors = require('cors');
+
+
+const { SSL_OP_ALL } = require('constants');
 
 const {Firebird,options}=require('../database/conecta');
 const fs=require('fs');
 // carrega o script AWS
-const awsTools=require('../public/javascripts/aws-script')
+const awsTools=require('../public/javascripts/aws-script-srv')
+
+// *** CORS ***
+// Libera troca de arquivos entre o servidor e computadores remotos em outros domínios
+router.all('*', function(req, res, next) {
+   res.header('Access-Control-Allow-Origin', '*');
+   res.header('Access-Control-Allow-Credentials', true);
+   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+   res.header('Access-Control-Allow-Headers', 'Content-Type');
+   next();
+ });
+ 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express',message:'mensagens' });
 });
 
-
+/*
 //Esta Rotina deu certo - Graças a Deus -26/abr/2022
-router.post("/logon", async function(req,res,next) {
+router.post("/logon", function(req,res,next) {
    var pwRet=''
    var retorno='';
-    await Firebird.attach(options, function(err, db) {
-    if (err){
-       res.json({"msg":"Error to open database!"});
-       res.end();
-    }else{
+
+  //console.log('Nome:--> '+req.body.nome);
+   Firebird.attach(options, function (err, db) {
+      if (err) {
+         res.json({ "logon":"err",msg: "Error to open database!" });
+         res.end();
+         return;
+      }
+
+      if (squery = undefined) {
+         res.json({ "logon":"err",msg: "Dados incompletos!" });
+         return;
+      }
 
       //----------------- Pwd enviada pelo form -------------------
-      const senhaPost=req.body.senha.trim().toUpperCase() 
+      const senhaPost = req.body.senha.trim().toUpperCase();
       //-----------------------------------------------------------
+      var squery = `SELECT CODUSU,SENHA FROM CFG_USUARIOS WHERE NOME='${req.body.nome.toUpperCase()}' AND SR_DELETED<>'T'`;
 
-      var squery=`SELECT CODUSU,SENHA FROM CFG_USUARIOS WHERE NOME='${req.body.nome.toUpperCase()}' AND SR_DELETED<>'T'`
+      db.query(squery, function (err, result) {
+         if (err)
+            throw ({"logon":"err","msg":err});
+         //return;
+         db.detach();
 
-      if (squery!=undefined){
-        db.query(squery, function(err, result) {
-        if (err)
-              throw err;
-          if (result.length==0){
-             console.log('-->Empty query!') ;
-             res.json({"msg":"-->Usuário não cadastrado ou senha inválida"})     ;
-             return;
-          }   
-
-          retorno=JSON.stringify(result);
-          pwRet=awsTools.desCript(result[0].SENHA)
-          console.log('Senha Descript:' + pwRet +' '+senhaPost);
-
-          if (pwRet!=senhaPost){
-            res.json({"msg":"Senha inválida"}) ;
+         if (result.length > 0) {
+            //retorno=JSON.stringify(result);
+             pwRet = awsTools.desCript(result[0].SENHA);
+            //console.log('Senha Descript:' + pwRet +' '+senhaPost);
+            if (pwRet != senhaPost) {
+               res.json({ "logon":"err","msg": "Senha inválida, tente novamente!" });
+               return;
+            }
+         }   
+         else{
+            console.log('-->Empty query!');
+            res.json({"logon":"err", "msg": "Usuário não encontrado!" });
             return;
-          }
-          db.detach();
-          res.redirect('http://localhost:3000/main')   
-          return;      
-            
-            });
-        }else{
-           console.log('Empty query!') 
-           res.json({"msg":"Usuário não cadastrado ou senha inválida"})     
-           return;
-        }   
-       } //else da conexao  
-     })     
-    }) ;    
+         }
+
+        console.log('Conectado com sucesso!');
+        console.log('Nome ' + req.body.nome + ' Senha: ' + req.body.senha);
+        res.json({"logon":"ok","msg":"http://localhost:3000/main/"});
+        return;      
+      });
+});
+
+})
+           
+*/       
 
 //----------------------------------------
 
