@@ -38,3 +38,11 @@ options.pageSize = 4096;
 options.retryConnectionInterval = 1000; 
 
 module.exports={Firebird,options}
+
+
+Para testar querys, digite: https://localhost:3010
+
+usuário: admin
+senha: 123
+
+Digite a query em formato SQL do Firebird, relativos a sua base de dados
