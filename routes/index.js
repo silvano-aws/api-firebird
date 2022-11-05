@@ -88,8 +88,9 @@ router.post("/logon", function(req,res,next) {
 //Esta Rotina deu certo - Graças a Deus -26/abr/2022
 router.post("/qry", async function(req,res,next) {
 
-  if (req.body.user!='adminaws' || req.body.pwd!='aws2015!#@'){
+  if (req.body.user!='admin' || req.body.pwd!='awssis'){
      res.json({"msg":"Conection refused by server"});
+     return
   };  
 
   var retorno='';
@@ -130,18 +131,20 @@ router.post("/qry", async function(req,res,next) {
          });
          */       
          
-         res.format({'application/json':function(){
+        // res.format({'application/json':function(){
             retorno=JSON.parse(retorno);
             res.json(retorno);
-            }       
-        });   
+          //  }       
+         // }); 
+            
            });
        }else{
           console.log('Empty query!') 
           res.json({"msg":"Empty Query!"})     
        }   
       } //else da conexao  
-    })     
+    })
+       
    }) ;    
 
 
