@@ -27,68 +27,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express',message:'mensagens' });
 });
 
-/*
-//Esta Rotina deu certo - Graças a Deus -26/abr/2022
-router.post("/logon", function(req,res,next) {
-   var pwRet=''
-   var retorno='';
-
-  //console.log('Nome:--> '+req.body.nome);
-   Firebird.attach(options, function (err, db) {
-      if (err) {
-         res.json({ "logon":"err",msg: "Error to open database!" });
-         res.end();
-         return;
-      }
-
-      if (squery = undefined) {
-         res.json({ "logon":"err",msg: "Dados incompletos!" });
-         return;
-      }
-
-      //----------------- Pwd enviada pelo form -------------------
-      const senhaPost = req.body.senha.trim().toUpperCase();
-      //-----------------------------------------------------------
-      var squery = `SELECT CODUSU,SENHA FROM CFG_USUARIOS WHERE NOME='${req.body.nome.toUpperCase()}' AND SR_DELETED<>'T'`;
-
-      db.query(squery, function (err, result) {
-         if (err)
-            throw ({"logon":"err","msg":err});
-         //return;
-         db.detach();
-
-         if (result.length > 0) {
-            //retorno=JSON.stringify(result);
-             pwRet = awsTools.desCript(result[0].SENHA);
-            //console.log('Senha Descript:' + pwRet +' '+senhaPost);
-            if (pwRet != senhaPost) {
-               res.json({ "logon":"err","msg": "Senha inválida, tente novamente!" });
-               return;
-            }
-         }   
-         else{
-            console.log('-->Empty query!');
-            res.json({"logon":"err", "msg": "Usuário não encontrado!" });
-            return;
-         }
-
-        console.log('Conectado com sucesso!');
-        console.log('Nome ' + req.body.nome + ' Senha: ' + req.body.senha);
-        res.json({"logon":"ok","msg":"http://localhost:3000/main/"});
-        return;      
-      });
-});
-
-})
-           
-*/       
-
-//----------------------------------------
 
 //Esta Rotina deu certo - Graças a Deus -26/abr/2022
 router.post("/qry", async function(req,res,next) {
 
-  if (req.body.user!='admin' || req.body.pwd!='awssis'){
+  if (req.body.user!='admin' || req.body.pwd!='123'){
      res.json({"msg":"Conection refused by server"});
      return
   };  
@@ -109,12 +52,12 @@ router.post("/qry", async function(req,res,next) {
      console.log('typeof(squery)--->',typeof(squery));
      console.log('squery',squery);
      if (squery!=undefined){
-       db.query(squery, function(err, result) {
-       if (err)
-             throw err;
-        // IMPORTANT: close the connection
-        console.log('retorno da query:' );
-        console.log(result);
+        db.query(squery, function(err, result) {
+        if (err)
+           throw err;
+         // IMPORTANT: close the connection
+         console.log('retorno da query:' );
+         console.log(result);
          console.log('Tipo de dados da variavel result: ',typeof(result));
          //console.log(result);
          retorno=JSON.stringify(result);
@@ -125,19 +68,9 @@ router.post("/qry", async function(req,res,next) {
          console.log('Tipo da varivael retorno aqui:')
          console.log(typeof(retorno));           
          fs.writeFileSync('database/email.json', retorno,'utf-8') ;
-         /*, (err) => {
-             if (err) throw err;
-                console.log('O arquivo foi criado!');
-         });
-         */       
-         
-        // res.format({'application/json':function(){
-            retorno=JSON.parse(retorno);
-            res.json(retorno);
-          //  }       
-         // }); 
-            
-           });
+         retorno=JSON.parse(retorno);
+         res.json(retorno);
+       });
        }else{
           console.log('Empty query!') 
           res.json({"msg":"Empty Query!"})     
