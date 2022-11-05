@@ -39,6 +39,8 @@ options.retryConnectionInterval = 1000;
 
 module.exports={Firebird,options}
 
+Para testar autenticação via HTML com fetch, rode o arquivo testeapi.html
+
 
 Para testar querys, digite: https://localhost:3010
 
