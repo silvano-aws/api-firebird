@@ -1,5 +1,43 @@
 Pequeno projeto para montar uma API de acesso ao Firebird em Nodej
-usando o módulo node-firebird
+usando o módulo node-firebird -  Precisa antes instalar o Firebird
+de sua preferência.
+
+Ao instalar o nodejs tem que alterar a variavel de ambiente path para dizer onde
+está instalado o node
+
+Para testar, sair para o terminal (cmd) e digitar node -v e npm -v
+
+Instalar o express e o express generator: 
+npm install -g -s express express generator
+
+-g= instala globalmente para todos os projetos  -s = registra a instalação no 
+
+
+Para configurar o express:
+
+express --view=ejs nome-do-projeto -->ja cria a estrutra de pastas do projeto
+conforme abaixo
+
+
+bin          - onde fica o arqwuivo www de configuração do servidor
+node_modules - onde ficam todas as dependencias instaladas automaticamente pelo npm install
+public       - arquivos estáticos, tipo imagens, scripts, css
+routes       - rotas para requisicoes http://
+views        - armazena as pastas de exibicção (html) mas com extensão ejs por causa do view engine ejs 
+instalado
+
+depois de tudo instalado para rodar o sistema digitar:
+Para preencher o packge.json:
+npm init
+
+instalar o HTTP-ERRORS
+npm install http-errors --save
+
+Intalar o driver do Firebird para Nodejs:
+npm install node-firebird@1.1.1
+
+
+npm start ou NODEMON (pacote que monitora alterações nos fontes)
 
 Para testar o projeto, altere o arquivo alias.conf do Firebird:
 
